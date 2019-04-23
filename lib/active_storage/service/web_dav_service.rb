@@ -12,12 +12,8 @@ module ActiveStorage
 
     def upload(key, io, checksum: nil, **)
       instrument :upload, key: key, checksum: checksum do
-        begin
-          full_path = path_for key
-          answer = @webdav.put(full_path, io, io.sizes)
-        rescue StandardError
-          raise ActiveStorage::IntegrityError
-        end
+        full_path = path_for key
+        @webdav.put(full_path, io, io.size)
       end
     end
 
